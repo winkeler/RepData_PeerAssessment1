@@ -7,14 +7,14 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r load data, echo = TRUE}
-data <- read.csv(unzip("activity.zip"))
 
+```r
+data <- read.csv(unzip("activity.zip"))
 ```
 
 ## What is mean total number of steps taken per day?
-```{r meansteps, echo = TRUE}
 
+```r
 #use tapply to calculate the total steps for each date
 dailysteps<-tapply(data$steps, data$date, sum, na.rm=TRUE)
 
@@ -28,13 +28,15 @@ hist(dailysteps,
      main = "Number of Steps per Day", 
      xlab = "Number of Steps")
 ```
+
+![](PA1_template_files/figure-html/meansteps-1.png)<!-- -->
   
-The mean number of steps in a day is `r meansteps`.  
-The median number of steps in a day is `r mediansteps`.  
+The mean number of steps in a day is 9354.2295082.  
+The median number of steps in a day is 10395.  
 
 ## What is the average daily activity pattern?
-```{r dailypattern, echo = TRUE}
 
+```r
 #Calculate and store the mean #of steps for each 5-minute interval
 meanstepsbyinterval <- tapply(data$steps, data$interval, mean, na.rm=TRUE)
 
@@ -46,7 +48,11 @@ plot(x = as.numeric(names(meanstepsbyinterval)),
      main = "Average Steps/Interval Over All Days vs. Intervals",
      xlab = "Intervals",
      ylab = "Average Steps Per Interval")  
+```
 
+![](PA1_template_files/figure-html/dailypattern-1.png)<!-- -->
+
+```r
 #The 5-minute interval, on average across all the days in the dataset, 
 #that contains the maximum number of steps:
 maxstepsinterval <- which(meanstepsbyinterval == max(meanstepsbyinterval))
@@ -54,12 +60,13 @@ maxstepsintervalnum <- names(maxstepsinterval)
 ```
 
 The 5-minute interval, on average across all the days in the dataset, that
-contains the maximum number of steps begins at `r maxstepsintervalnum` minutes
-with a maximum average of `r max(meanstepsbyinterval)` steps.
+contains the maximum number of steps begins at 835 minutes
+with a maximum average of 206.1698113 steps.
 
 
 ## Imputing missing values
-```{r missing values, echo = TRUE}
+
+```r
 #determine the number of rows that contain an na
 narows <- sum(!complete.cases(data))
 
@@ -83,14 +90,16 @@ hist(imputeddailysteps,
      breaks = 10,
      main = "Number of Steps per Day with Imputed Data", 
      xlab = "Number of Steps")  
-
 ```
+
+![](PA1_template_files/figure-html/missing values-1.png)<!-- -->
   
-After imputing, the new mean number of steps in a day is `r imputedmeansteps`.  
-The new median number of steps in a day is `r imputedmediansteps`. 
+After imputing, the new mean number of steps in a day is 1.0766189\times 10^{4}.  
+The new median number of steps in a day is 1.0766189\times 10^{4}. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekends, echo = TRUE}
+
+```r
 #isWeekend is a boolean vector that indicates TRUE for a weekend day
 isWeekend <- weekdays(as.Date(imputed$date)) %in% c("Saturday", "Sunday")
 
@@ -128,5 +137,6 @@ plot(x = as.numeric(names(meanstepsbyintervalend)),
      main = "Weekends: Average Steps/Interval vs. Intervals",
      xlab = "Intervals",
      ylab = "Average Steps Per Interval")
-
 ```
+
+![](PA1_template_files/figure-html/weekends-1.png)<!-- -->
